@@ -13,3 +13,6 @@ def file_choice(request):
     else:
         form = UploadFileForm()
     return render(request, 'localizer/upload.html', {'form': form})
+
+def recorderjs_test(request):
+    return render(request, 'localizer/waveRecorder.html')
