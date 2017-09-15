@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+
+    <script src="{% static 'localizer/js/Recorderjs/dist/recorder.min.js' %}"></script>
+
+</head>
+<body>
+    <p>Маленькая девочка читает...</p>
+
+    <script>
+        var recorder;
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Required for Django CSRF
+        function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+        // Actual Upload function using xhr
+        function upload(blob, progressBar){
+                var csrftoken = getCookie('csrftoken');
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'upload/', true);
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                xhr.setRequestHeader("MyCustomHeader", "Put anything you need in here, like an ID");
+                xhr.send(blob);
+        };
+
+        document.addEventListener("DOMContentLoaded",
+            async function(){
+                recorder.initStream();
+
+                recorder.addEventListener( "dataAvailable", function(event){
+                    var dataBlob = new Blob( [e.detail], { type: 'audio/ogg' } );
+                    var fileName = new Date().toISOString() + ".opus";
+                    var url = URL.createObjectURL( dataBlob );
+
+
+
+
+                });
+
+                recorder.start();
+                await sleep(7000);
+                recorder.stop();
+                upload(event.detail, progress);
+            }
+        );
+
+    </script>
+
+</body>
+</html>
