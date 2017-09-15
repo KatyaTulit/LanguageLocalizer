@@ -1,7 +1,15 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse
+
+from .forms import UploadFileForm
 
 def file_choice(request):
-    pass
-
-def file_upload(request):
-    pass
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('localizer:file_choice'))
+    else:
+        form = UploadFileForm()
+    return render(request, 'localizer/upload.html', {'form': form})
