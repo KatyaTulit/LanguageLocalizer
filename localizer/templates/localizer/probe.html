@@ -13,10 +13,19 @@
 <body>
     <p>Маленькая девочка читает...</p>
 
+    <form action='.' enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+    </form>
+
     <script>
-        var recorder = new Recorder();
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
+        var recorder;
+
+        if (!Recorder.isRecordingSupported()) {
+            console.log("Recording features are not supported in your browser.");
+        }
+
+        function async_sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
         }
 
         // Required for Django CSRF
@@ -47,19 +56,34 @@
         };
 
         document.addEventListener("DOMContentLoaded",
-            async function(event){
-                recorder.initStream();
-
-                recorder.addEventListener( "dataAvailable", function(event){
-                    var dataBlob = new Blob( [e.detail], { type: 'audio/ogg' } );
-                    var fileName = new Date().toISOString() + ".opus";
-                    var url = URL.createObjectURL( dataBlob );
+            function(event){
+                recorder = new Recorder({
+                    encoderBitRate: 128,
+                    encoderApplication: 2048, // voice
+                    wavBitDepth: 8,
+                    encoderPath: "{% static 'localizer/js/Recorderjs/dist/waveWorker.min.js' %}"
                 });
 
-                recorder.start();
-                await sleep(7000);
-                recorder.stop();
-                upload(event.detail);
+                recorder.addEventListener( "streamReady", async function(e){
+                    console.log("Stream initialized");
+                    recorder.start();
+                    console.log("Recording started");
+                    await async_sleep(3000);
+                    recorder.stop();
+                    console.log("Recording stopped");
+                });
+
+                recorder.addEventListener( "streamError", function(e){
+                    console.log('Error encountered: ' + e.error.name );
+                });
+
+                recorder.addEventListener( "dataAvailable", function(e){
+                    console.log("dataAvailable");
+                    upload(e.detail);
+                 });
+
+                recorder.initStream();
+                console.log("Stream initialized");
             }
         );
 
