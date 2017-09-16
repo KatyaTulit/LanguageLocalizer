@@ -5,6 +5,8 @@
     <title>Title</title>
     {% load static %}
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
     <script src="{% static 'localizer/js/Recorderjs/dist/recorder.min.js' %}"></script>
 
 </head>
@@ -12,7 +14,7 @@
     <p>Маленькая девочка читает...</p>
 
     <script>
-        var recorder;
+        var recorder = new Recorder();
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
@@ -35,9 +37,8 @@
             }
 
         // Actual Upload function using xhr
-        function upload(blob, progressBar){
+        function upload(blob){
                 var csrftoken = getCookie('csrftoken');
-
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', 'upload/', true);
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
@@ -46,23 +47,19 @@
         };
 
         document.addEventListener("DOMContentLoaded",
-            async function(){
+            async function(event){
                 recorder.initStream();
 
                 recorder.addEventListener( "dataAvailable", function(event){
                     var dataBlob = new Blob( [e.detail], { type: 'audio/ogg' } );
                     var fileName = new Date().toISOString() + ".opus";
                     var url = URL.createObjectURL( dataBlob );
-
-
-
-
                 });
 
                 recorder.start();
                 await sleep(7000);
                 recorder.stop();
-                upload(event.detail, progress);
+                upload(event.detail);
             }
         );
 

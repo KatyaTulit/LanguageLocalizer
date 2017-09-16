@@ -16,3 +16,6 @@ def file_choice(request):
 
 def recorderjs_test(request):
     return render(request, 'localizer/waveRecorder.html')
+
+def probe(request):
+    return render(request, 'localizer/probe.html')
