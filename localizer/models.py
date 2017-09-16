@@ -2,6 +2,7 @@ import csv
 
 from django.db import models
 from django.templatetags.static import static
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class Subject(models.Model):
@@ -47,3 +48,17 @@ class Answer(models.Model):
         code_name = self.subject.code_name
         probe_text = self.probe.probe_text
         return "{}'s response to '{}'".format(code_name, probe_text)
+
+    @staticmethod
+    def get_next_probe(subject):
+        answers = Answer.objects.filter(subject=subject)
+        if not answers:
+            next_probe_number = 1
+        else:
+            probe_numbers = [answer.probe.probe_number for answer in answers]
+            next_probe_number = max(probe_numbers) + 1
+        try:
+            probe = Probe.objects.get(probe_number=next_probe_number)
+            return probe
+        except ObjectDoesNotExist:
+            return None
