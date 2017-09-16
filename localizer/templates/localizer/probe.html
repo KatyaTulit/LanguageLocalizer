@@ -50,6 +50,13 @@
         function upload(blob){
                 var csrftoken = getCookie('csrftoken');
                 var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == XMLHttpRequest.DONE) {
+                        document.open('text/html');
+                        document.write(xhr.responseText);
+                        document.close();
+                    }
+                }
                 xhr.open('POST', 'upload/', true);
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 xhr.setRequestHeader("MyCustomHeader", "Put anything you need in here, like an ID");

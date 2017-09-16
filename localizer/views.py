@@ -27,6 +27,6 @@ def upload_probe(request):
     if request.method == 'POST':
         with open("responses/recording2.ogg", "wb") as f:
             f.write(request.body)
-
+        return HttpResponse("The sound has been upload to the server")
     else:
         return HttpResponse("View should only be requested with POST")
