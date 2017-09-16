@@ -33,6 +33,5 @@ class Probe(models.Model):
                             probe_number=file_reader.line_num)
                 probe.save()
 
-
     def __str__(self):
         return self.probe_text

@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 
 from .forms import UploadFileForm
-from .models import Response
+from .models import Probe
 
 def file_choice(request):
     if request.method == 'POST':
@@ -18,15 +18,15 @@ def file_choice(request):
 def recorderjs_test(request):
     return render(request, 'localizer/waveRecorder.html')
 
-
 def probe(request):
-    return render(request, 'localizer/probe.html')
+    probe = get_object_or_404(Probe, pk=1)
+    return render(request, 'localizer/probe.html',
+                  {'probe_text': probe.probe_text})
 
 def upload_probe(request):
     if request.method == 'POST':
         with open("responses/recording2.ogg", "wb") as f:
             f.write(request.body)
 
-        return HttpResponse("Sound uploaded")
     else:
         return HttpResponse("View should only be requested with POST")
