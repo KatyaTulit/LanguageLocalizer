@@ -20,8 +20,7 @@ def recorderjs_test(request):
 
 
 def probe(request):
-    form = UploadFileForm()
-    return render(request, 'localizer/probe.html', {'form': form})
+    return render(request, 'localizer/probe.html')
 
 def upload_probe(request):
     if request.method == 'POST':
