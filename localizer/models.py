@@ -12,10 +12,6 @@ class Subject(models.Model):
         return self.code_name
 
 
-class Response(models.Model):
-    # subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    response_sound = models.FileField(upload_to='responses/')
-
 class Probe(models.Model):
     probe_text = models.CharField(max_length=200)
     control_condition = models.CharField(max_length=200)
@@ -35,3 +31,19 @@ class Probe(models.Model):
 
     def __str__(self):
         return self.probe_text
+
+
+class Response(models.Model):
+    response_sound = models.FileField(upload_to='responses/')
+
+
+class Answer(models.Model):
+    subject = models.ForeignKey(Subject, on_delete=models.PROTECT)
+    probe = models.ForeignKey(Probe, on_delete=models.PROTECT)
+    response_sound_file_path = models.FilePathField()
+    dt_recorded = models.DateTimeField(auto_now=True)
+
+    def __str___(self):
+        code_name = self.subject.code_name
+        probe_text = self.probe.probe_text
+        return "{}'s response to '{}'".format(code_name, probe_text)
