@@ -19,7 +19,7 @@ def recorderjs_test(request):
     return render(request, 'localizer/waveRecorder.html')
 
 def probe(request):
-    probe = get_object_or_404(Probe, pk=1)
+    probe = get_object_or_404(Probe, probe_number=1)
     return render(request, 'localizer/probe.html',
                   {'probe_text': probe.probe_text})
 

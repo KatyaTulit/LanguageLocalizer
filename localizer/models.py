@@ -25,7 +25,7 @@ class Probe(models.Model):
     @classmethod
     def add_from_file(cls, csv_file_name, control_condition):
         file_path = 'localizer/static/localizer/csv/{}.csv'.format(csv_file_name)
-        with open(file_path, newline='') as csvfile:
+        with open(file_path, newline='', encoding='utf-8') as csvfile:
             file_reader = csv.reader(csvfile, delimiter=',')
             for row in file_reader:
                 assert(len(row) == 1)
