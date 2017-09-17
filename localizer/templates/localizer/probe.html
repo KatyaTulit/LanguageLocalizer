@@ -52,9 +52,12 @@
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState == XMLHttpRequest.DONE) {
-                        document.open('text/html');
-                        document.write(xhr.responseText);
-                        document.close();
+                        // The browser will automatically follow the redirect if the server returns it.
+                        // In that case we would not move to another url but xhr.responseText would
+                        // contain the html of the page we would have redirected to.
+                        // Instead, we return the redirect URL in the response body and go there.
+                        redirect_url = xhr.responseText;
+                        window.location = redirect_url;
                     }
                 }
                 xhr.open('POST', 'upload/', true);

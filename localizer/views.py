@@ -40,6 +40,8 @@ def upload_probe(request):
         answer = Answer(subject=subject, probe=probe,
                         response_sound_file_path=file_path)
         answer.save()
-        return HttpResponseRedirect(reverse('localizer:probe'))
+
+        # Redirect will be handled by js so we will send the URL in the body
+        return HttpResponse(reverse('localizer:probe'))
     else:
         return HttpResponse("View should only be requested with POST")
