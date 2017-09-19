@@ -19,6 +19,12 @@
         Заполните небольшую анкету и переходите к самому эксперименту.
     </p>
 
-    <a class="btn btn-primary" href="{% url 'localizer:instructions' %}">Продолжить</a>
+    <form action='.' enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit" />
+    </form>
+
+    <!-- <a class="btn btn-primary" href="{% url 'localizer:instructions' %}">Продолжить</a> -->
 </body>
 </html>

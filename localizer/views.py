@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.db.models import Max
 
-from .forms import UploadFileForm
+from .forms import UploadFileForm, SubjectQuestionnaireForm
 from .models import Probe, Subject, Answer
 
 def file_choice(request):
@@ -54,7 +54,16 @@ def soundtest(request):
     return render(request, 'localizer/soundtest.html')
 
 def questionnaire(request):
-    return render(request, 'localizer/questionnaire.html')
+    if request.method == 'POST':
+        form = SubjectQuestionnaireForm(request.POST, request.FILES)
+        if form.is_valid():
+
+            form.save()
+
+            return HttpResponseRedirect(reverse('localizer:instructions'))
+    else:
+        form = SubjectQuestionnaireForm()
+    return render(request, 'localizer/questionnaire.html', {'form': form})
 
 def instructions(request):
     return render(request, 'localizer/instructions.html')
