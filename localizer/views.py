@@ -45,3 +45,16 @@ def upload_probe(request):
         return HttpResponse(reverse('localizer:probe'))
     else:
         return HttpResponse("View should only be requested with POST")
+
+
+def welcome(request):
+    return render(request, 'localizer/welcome.html')
+
+def soundtest(request):
+    return render(request, 'localizer/soundtest.html')
+
+def questionnaire(request):
+    return render(request, 'localizer/questionnaire.html')
+
+def instructions(request):
+    return render(request, 'localizer/instructions.html')

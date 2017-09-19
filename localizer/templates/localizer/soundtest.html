@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <h1>Проверка звука</h1>
+    <p>
+        Давайте протестируем микрофон. Нажмите на кнопку «Запись», скажите несколько слов, нажмите на кнопку «Стоп».
+        Внизу появится ваша запись, которую вы можете прослушать.
+        Если громкость записи нормальная и можно легко понять, что вы сказали, то переходите к следующей странице, нажав «Продолжить».
+        Если что-то вас не устроила, попробуйте записать звук еще раз.
+        Если у вас возникли проблемы, вы можете связаться с нами по адресу: ek.stupina@gmail.com (Екатерина).
+    </p>
+
+    <a class="btn btn-primary" href="{% url 'localizer:questionnaire' %}">Продолжить</a>
+</body>
+</html>
