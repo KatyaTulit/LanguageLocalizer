@@ -12,7 +12,7 @@
 </head>
 <body>
 
-    <p>{{ probe_text }}</p>
+    <p id="probe_text"></p>
 
     <form action='.' enctype="multipart/form-data" method="post">
         {% csrf_token %}
@@ -76,12 +76,14 @@
                 });
 
                 recorder.addEventListener( "streamReady", async function(e){
-                    console.log("Stream initialized");
+                    for (i = 3; i >= 1; i--) {
+                        probe_text.innerHTML = i.toString();
+                        await async_sleep(800);
+                    }
+                    probe_text.innerHTML = "{{ probe_text }}";
                     recorder.start();
-                    console.log("Recording started");
-                    await async_sleep(3000);
+                    await async_sleep(2000);
                     recorder.stop();
-                    console.log("Recording stopped");
                 });
 
                 recorder.addEventListener( "streamError", function(e){
