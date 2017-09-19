@@ -3,11 +3,36 @@ import csv
 from django.db import models
 from django.templatetags.static import static
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Subject(models.Model):
-    code_name = models.CharField(max_length=200)
+    code_name = models.CharField(max_length=15)
     date_added = models.DateTimeField(auto_now=True)
+    probe_control_conditions = models.CharField(max_length=200)
+    age = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
+
+    gender = models.CharField(
+        max_length=10,
+        choices=(
+            ('female', 'Женщина'), ('male', 'Мужчина'), ('other', 'Иное')
+        )
+    )
+
+    DIPLOMA = 'Higher'
+    STUDENT = 'Student'
+    HIGHSCHOOL = 'HighSchool'
+    NINECLASSES = 'NineClasses'
+    EDUCATION_CHOICES = (
+        (DIPLOMA, 'Высшее'),
+        (STUDENT, 'Получаю высшее (студент)'),
+        (HIGHSCHOOL, 'Полное среднее, среднее специальное'),
+        (NINECLASSES, 'Неполное среднее'),
+    )
+    education = models.CharField(
+        max_length=20,
+        choices=EDUCATION_CHOICES,
+    )
 
     def __str__(self):
         return self.code_name
