@@ -1,4 +1,5 @@
 import csv
+import os
 
 from django.db import models
 import uuid
@@ -52,6 +53,17 @@ class Subject(models.Model):
         unique_id = request.COOKIES.get(Subject.COOKIE_NAME)
         return Subject.objects.get(unique_id=unique_id)
 
+    def answer_dir(self, control_condition):
+        subject_dir = self.code_name or str(self.unique_id)
+        return os.path.join(Answer.BASE_DIR, subject_dir, control_condition)
+
+    def make_dirs(self):
+        control_conditions = self.probe_control_conditions.split(',')
+        for control_condition in control_conditions:
+            dir = self.answer_dir(control_condition)
+            if not os.path.exists(dir):
+                os.makedirs(dir)
+
 
 class Probe(models.Model):
     probe_text = models.CharField(max_length=200)
@@ -79,6 +91,8 @@ class Response(models.Model):
 
 
 class Answer(models.Model):
+    BASE_DIR = 'answers/'
+
     subject = models.ForeignKey(Subject, on_delete=models.PROTECT)
     probe = models.ForeignKey(Probe, on_delete=models.PROTECT)
     response_sound_file_path = models.FilePathField()
@@ -102,3 +116,12 @@ class Answer(models.Model):
             return probe
         except ObjectDoesNotExist:
             return None
+
+    @classmethod
+    def save_sound_file(cls, sound_content, subject, probe):
+        subject_dir = subject.code_name or subject.unique_id
+        file_path = os.path.join(subject.answer_dir(probe.control_condition),
+                                 "probe_{}.ogg".format(probe.probe_number))
+        with open(file_path, "wb") as f:
+            f.write(sound_content)
+        return file_path
