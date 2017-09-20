@@ -57,10 +57,10 @@ def questionnaire(request):
     if request.method == 'POST':
         form = SubjectQuestionnaireForm(request.POST, request.FILES)
         if form.is_valid():
-
-            form.save()
-
-            return HttpResponseRedirect(reverse('localizer:instructions'))
+            subject = form.save()
+            response = HttpResponseRedirect(reverse('localizer:instructions'))
+            response.set_cookie("user_id", subject.unique_id)
+            return response
     else:
         form = SubjectQuestionnaireForm()
     return render(request, 'localizer/questionnaire.html', {'form': form})

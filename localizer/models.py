@@ -1,16 +1,24 @@
 import csv
 
 from django.db import models
+import uuid
 from django.templatetags.static import static
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
+def create_control_condition_sequence():
+    return 'test'
+
+
 class Subject(models.Model):
     code_name = models.CharField(max_length=15)
     date_added = models.DateTimeField(auto_now=True)
-    probe_control_conditions = models.CharField(max_length=200)
+    probe_control_conditions = models.CharField(max_length=200,
+                                                default=create_control_condition_sequence)
     age = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
+    unique_id = models.UUIDField(default=uuid.uuid4,
+                                 editable=False)
 
     gender = models.CharField(
         max_length=10,
