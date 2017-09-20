@@ -12,6 +12,8 @@ def create_control_condition_sequence():
 
 
 class Subject(models.Model):
+    COOKIE_NAME = 'subject_id'
+
     code_name = models.CharField(max_length=15)
     date_added = models.DateTimeField(auto_now=True)
     probe_control_conditions = models.CharField(max_length=200,
@@ -44,6 +46,11 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.code_name
+
+    @classmethod
+    def get_subject_by_cookie(cls, request):
+        unique_id = request.COOKIES.get(Subject.COOKIE_NAME)
+        return Subject.objects.get(unique_id=unique_id)
 
 
 class Probe(models.Model):

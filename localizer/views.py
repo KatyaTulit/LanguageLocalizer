@@ -20,7 +20,7 @@ def recorderjs_test(request):
     return render(request, 'localizer/waveRecorder.html')
 
 def probe(request):
-    subject = Subject.objects.get(code_name='test')
+    subject = Subject.get_subject_by_cookie(request)
     probe = Answer.get_next_probe(subject)
     if probe:
         return render(request, 'localizer/probe.html',
@@ -30,7 +30,7 @@ def probe(request):
 
 def upload_probe(request):
     if request.method == 'POST':
-        subject = Subject.objects.get(code_name='test')
+        subject = Subject.get_subject_by_cookie(request)
         probe = Answer.get_next_probe(subject)
 
         file_path = "responses/recording{}.ogg".format(probe.probe_number)
@@ -44,7 +44,7 @@ def upload_probe(request):
         # Redirect will be handled by js so we will send the URL in the body
         return HttpResponse(reverse('localizer:probe'))
     else:
-        return HttpResponse("View should only be requested with POST")
+        return HttpResponseRedirect(reverse('localizer:probe'))
 
 
 def welcome(request):
@@ -59,7 +59,7 @@ def questionnaire(request):
         if form.is_valid():
             subject = form.save()
             response = HttpResponseRedirect(reverse('localizer:instructions'))
-            response.set_cookie("user_id", subject.unique_id)
+            response.set_cookie(Subject.COOKIE_NAME, subject.unique_id)
             return response
     else:
         form = SubjectQuestionnaireForm()
