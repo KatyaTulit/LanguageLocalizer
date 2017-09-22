@@ -62,3 +62,12 @@ def questionnaire(request):
 
 def instructions(request):
     return render(request, 'localizer/instructions.html')
+
+def unknown_subject(request):
+    return render(request, 'localizer/error_unknown_subject.html')
+
+def same_subject(request):
+    return render(request, 'localizer/error_same_subject.html')
+
+def end(request):
+    return render(request, 'localizer/end.html')

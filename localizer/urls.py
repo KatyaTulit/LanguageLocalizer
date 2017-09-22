@@ -12,5 +12,8 @@ urlpatterns = [
     url(r'soundtest/$', views.soundtest, name='soundtest'),
     url(r'questionnaire/$', views.questionnaire, name='questionnaire'),
     url(r'instructions/$', views.instructions, name='instructions'),
+    url(r'error_unknown_subject/$', views.unknown_subject, name='error_unknown_subject'),
+    url(r'error_same_subject/$', views.same_subject, name='error_same_subject'),
+    url(r'end/$', views.end, name='end'),
 
 ]
