@@ -11,8 +11,9 @@
 
 </head>
 <body>
-
-    <p id="probe_text"></p>
+    <div align="center" class="well">
+        <h1 id="probe_text"></h1>
+    </div>
 
     <form action='.' enctype="multipart/form-data" method="post">
         {% csrf_token %}
@@ -82,7 +83,7 @@
                     }
                     probe_text.innerHTML = "{{ probe_text }}";
                     recorder.start();
-                    await async_sleep(2000);
+                    await async_sleep(3000);
                     recorder.stop();
                 });
 

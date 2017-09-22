@@ -27,18 +27,19 @@
 </style>
 
 <body>
-    <h1>Анкета</h1>
-    <p>
-        Прежде чем начать, мы бы хотели с вами немного познакомиться.
-        Заполните небольшую анкету и переходите к самому эксперименту.
-    </p>
+    <div align="center" class="well">
+        <h1>Анкета</h1>
+        <p>
+            Прежде чем начать, мы бы хотели с вами немного познакомиться.
+            Заполните небольшую анкету и переходите к самому эксперименту.
+        </p>
 
-    <form action='.' enctype="multipart/form-data" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Submit" />
-    </form>
-
+        <form action='.' enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
     <!-- <a class="btn btn-primary" href="{% url 'localizer:instructions' %}">Продолжить</a> -->
 </body>
 </html>
