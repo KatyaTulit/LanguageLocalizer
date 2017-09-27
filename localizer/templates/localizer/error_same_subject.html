@@ -30,8 +30,8 @@
         <p>
             Кажется, вы уже начали проходить эксперимент. Вы можете продолжить или начать сначала (прогресс потеряется).
         </p>
-        <a class="btn btn-info" href="">Начать сначала</a>
-        <a class="btn btn-info" href="">Продолжить</a>
+        <a class="btn btn-info" href="{% url 'localizer:restart' %}">Начать сначала</a>
+        <a class="btn btn-info" href="{% url 'localizer:resume' %}">Продолжить</a>
     </div>
 
 </body>

@@ -51,7 +51,10 @@ class Subject(models.Model):
     @classmethod
     def get_subject_by_cookie(cls, request):
         unique_id = request.COOKIES.get(Subject.COOKIE_NAME)
-        return Subject.objects.get(unique_id=unique_id)
+        try:
+            return Subject.objects.get(unique_id=unique_id)
+        except ObjectDoesNotExist:
+            return None
 
     def answer_dir(self, control_condition):
         subject_dir = self.code_name or str(self.unique_id)
@@ -111,6 +114,7 @@ class Answer(models.Model):
         else:
             probe_numbers = [answer.probe.probe_number for answer in answers]
             next_probe_number = max(probe_numbers) + 1
+
         try:
             probe = Probe.objects.get(probe_number=next_probe_number)
             return probe

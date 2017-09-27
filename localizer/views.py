@@ -5,6 +5,7 @@ from django.urls import reverse
 from .forms import UploadFileForm, SubjectQuestionnaireForm
 from .models import Probe, Subject, Answer
 
+
 def file_choice(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -15,17 +16,10 @@ def file_choice(request):
         form = UploadFileForm()
     return render(request, 'localizer/upload.html', {'form': form})
 
+
 def recorderjs_test(request):
     return render(request, 'localizer/waveRecorder.html')
 
-def probe(request):
-    subject = Subject.get_subject_by_cookie(request)
-    probe = Answer.get_next_probe(subject)
-    if probe:
-        return render(request, 'localizer/probe.html',
-                      {'probe_text': probe.probe_text})
-    else:
-        return HttpResponse("Вы ответили на все вопросы. Спасибо вам большое.")
 
 def upload_probe(request):
     if request.method == 'POST':
@@ -36,38 +30,70 @@ def upload_probe(request):
         answer.save()
 
         # Redirect will be handled by js so we will send the URL in the body
-        return HttpResponse(reverse('localizer:probe'))
+        return HttpResponse(reverse('localizer:task'))
     else:
-        return HttpResponseRedirect(reverse('localizer:probe'))
+        return HttpResponseRedirect(reverse('localizer:task'))
 
 
 def welcome(request):
-    return render(request, 'localizer/welcome.html')
+    subject = Subject.get_subject_by_cookie(request)
+    if subject is None:
+        return render(request, 'localizer/welcome.html')
+    else:
+        return render(request, 'localizer/error_same_subject.html')
+
 
 def soundtest(request):
-    return render(request, 'localizer/soundtest.html')
+    subject = Subject.get_subject_by_cookie(request)
+    if subject is None:
+        return render(request, 'localizer/soundtest.html')
+    else:
+        return render(request, 'localizer/error_same_subject.html')
+
 
 def questionnaire(request):
-    if request.method == 'POST':
-        form = SubjectQuestionnaireForm(request.POST, request.FILES)
-        if form.is_valid():
-            subject = form.save()
-            subject.make_dirs()
-            response = HttpResponseRedirect(reverse('localizer:instructions'))
-            response.set_cookie(Subject.COOKIE_NAME, subject.unique_id)
-            return response
+    subject = Subject.get_subject_by_cookie(request)
+    if subject is None:
+        if request.method == 'POST':
+            form = SubjectQuestionnaireForm(request.POST, request.FILES)
+            if form.is_valid():
+                subject = form.save()
+                subject.make_dirs()
+                response = HttpResponseRedirect(reverse('localizer:instructions'))
+                response.set_cookie(Subject.COOKIE_NAME, subject.unique_id)
+                return response
+        else:
+            form = SubjectQuestionnaireForm()
+        return render(request, 'localizer/questionnaire.html', {'form': form})
     else:
-        form = SubjectQuestionnaireForm()
-    return render(request, 'localizer/questionnaire.html', {'form': form})
+        return render(request, 'localizer/error_same_subject.html')
 
-def instructions(request):
-    return render(request, 'localizer/instructions.html')
 
 def unknown_subject(request):
     return render(request, 'localizer/error_unknown_subject.html')
 
-def same_subject(request):
-    return render(request, 'localizer/error_same_subject.html')
 
-def end(request):
-    return render(request, 'localizer/end.html')
+def restart(request):
+    response = HttpResponseRedirect(reverse('localizer:welcome'))
+    response.delete_cookie(Subject.COOKIE_NAME)
+    return response
+
+
+def resume(request):
+    response = HttpResponseRedirect(reverse('localizer:instructions'))
+    return response
+
+
+def task(request):
+    subject = Subject.get_subject_by_cookie(request)
+    probe = Answer.get_next_probe(subject)
+
+    if probe is not None:
+        return render(request, 'localizer/probe.html',
+                      {'probe_text': probe.probe_text})
+    else:
+        return render(request, 'localizer/end.html')
+
+
+def instructions(request):
+    return render(request, 'localizer/instructions.html')
