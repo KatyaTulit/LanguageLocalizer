@@ -11,20 +11,29 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-</head>
+    {% load static %}
 
-<style>
-    p {
-    margin: 2%;
-    text-align: left;
-    }
-    div {
-    margin: 5%
-    }
-    .danger-color{
-        color: #E53935;
-    }
-</style>
+    <script src="{% static 'localizer/js/Recorderjs/dist/recorder.min.js' %}"></script>
+
+    <style>
+        p {
+        margin: 2%;
+        text-align: left;
+        }
+
+        div {
+        margin: 5%
+        }
+
+        .danger-color{
+            color: #E53935;
+        }
+
+        ul { list-style: none; }
+        li { margin: 1em; }
+        audio { display: block; }
+    </style>
+</head>
 
 <body>
     <div align="center" class="well">
@@ -43,7 +52,109 @@
             Если у вас возникли проблемы с записью, вы можете связаться с нами по адресу: ek.stupina@gmail.com (Екатерина).
         </p>
 
+        <h3>Тестирование записи звука</h3>
+
+        <button id="start" >Начать</button>
+        <button id="stopButton" disabled>Закончить</button>
+
+        <h3>Ваши записи</h3>
+        <ul id="recordingslist"></ul>
+
         <a class="btn btn-info" href="{% url 'localizer:questionnaire' %}">Продолжить</a>
     </div>
+
+    <script>
+        var recorder;
+
+        stopButton.addEventListener( "click", function(){ recorder.stop(); });
+
+        // Required for Django CSRF
+        function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+        }
+
+        // Actual Upload function using xhr
+        function upload(blob){
+                var csrftoken = getCookie('csrftoken');
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == XMLHttpRequest.DONE) {
+                        // The browser will automatically follow the redirect if the server returns it.
+                        // In that case we would not move to another url but xhr.responseText would
+                        // contain the html of the page we would have redirected to.
+                        // Instead, we return the redirect URL in the response body and go there.
+                        redirect_url = xhr.responseText;
+                        window.location = redirect_url;
+                    }
+                }
+                xhr.open('POST', 'upload/', true);
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                xhr.setRequestHeader("MyCustomHeader", "Put anything you need in here, like an ID");
+                xhr.send(blob);
+        };
+
+        start.addEventListener( "click", function(){
+
+                if (!Recorder.isRecordingSupported()) {
+                    console.log("Ваш браузер не поддерживает запись звука.");
+                }
+
+                recorder = new Recorder({
+                    encoderBitRate: 128,
+                    encoderApplication: 2048, // voice
+                    wavBitDepth: 8,
+                    encoderPath: "{% static 'localizer/js/Recorderjs/dist/waveWorker.min.js' %}"
+                });
+
+                recorder.addEventListener( "stop", function(e){
+                    stopButton.disabled = true;
+                    start.disabled = false;
+                });
+
+                recorder.addEventListener( "streamReady", function(e){
+                    recorder.start();
+                    start.disabled = true;
+                    stopButton.disabled = false;
+                });
+
+                recorder.addEventListener( "streamError", function(e){
+                    console.log('Error encountered: ' + e.error.name );
+                });
+
+                recorder.addEventListener( "dataAvailable", function(e){
+                    var dataBlob = new Blob( [e.detail], { type: 'audio/ogg' } );
+                    var fileName = new Date().toISOString() + ".ogg";
+                    var url = URL.createObjectURL( dataBlob );
+
+                    var audio = document.createElement('audio');
+                    audio.controls = true;
+                    audio.src = url;
+
+                    var link = document.createElement('a');
+                    link.href = url;
+                    link.download = fileName;
+                    link.innerHTML = link.download;
+
+                    var li = document.createElement('li');
+                    li.appendChild(audio);
+
+                    recordingslist.appendChild(li);
+                });
+
+                recorder.initStream();
+        });
+    </script>
 </body>
 </html>

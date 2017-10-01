@@ -23,7 +23,7 @@
         var recorder;
 
         if (!Recorder.isRecordingSupported()) {
-            console.log("Recording features are not supported in your browser.");
+            console.log("Ваш браузер не поддерживает запись звука.");
         }
 
         function async_sleep(ms) {
@@ -94,7 +94,7 @@
                 recorder.addEventListener( "dataAvailable", function(e){
                     console.log("dataAvailable");
                     upload(e.detail);
-                 });
+                });
 
                 recorder.initStream();
                 console.log("Stream initialized");
