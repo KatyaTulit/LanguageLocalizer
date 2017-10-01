@@ -12,8 +12,9 @@ class UploadFileForm(forms.ModelForm):
 class SubjectQuestionnaireForm(forms.ModelForm):
     class Meta:
         model = Subject
-        fields = ['age', 'gender', 'education']
-        labels = {'age': 'Возраст', 'gender': 'Пол', 'education': 'Образование'}
+        fields = ['age', 'gender', 'education','languages']
+        labels = {'age': 'Возраст', 'gender': 'Пол', 'education': 'Образование',
+                  'languages': 'Родные языки, кроме русского (если есть)'}
         error_messages = {
             'age': {
                 'max_value': "Пожалуйста, введите значение от 1 до 100",

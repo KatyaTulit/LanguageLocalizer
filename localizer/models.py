@@ -30,7 +30,7 @@ class Subject(models.Model):
         )
     )
 
-
+    languages = models.CharField(max_length=30, default='нет')
 
     DIPLOMA = 'Higher'
     STUDENT = 'Student'
