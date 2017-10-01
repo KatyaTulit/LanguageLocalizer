@@ -30,6 +30,8 @@ class Subject(models.Model):
         )
     )
 
+
+
     DIPLOMA = 'Higher'
     STUDENT = 'Student'
     HIGHSCHOOL = 'HighSchool'
