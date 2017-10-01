@@ -9,10 +9,27 @@
 
     <script src="{% static 'localizer/js/Recorderjs/dist/recorder.min.js' %}"></script>
 
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'localizer/style.css' %}" />
+
+
 </head>
+
+<style>
+    .align-text {
+        position: absolute;
+        width: 300px;
+        height: 200px;
+        z-index: 15;
+        top: 50%;
+        left: 50%;
+        margin: -100px 0 0 -150px;
+    }
+</style>
+
 <body>
-    <div align="center" class="well">
-        <h1 id="probe_text"></h1>
+    <div class="well align-text">
+        <h1 id="probe_text" align="center"></h1>
     </div>
 
     <form action='.' enctype="multipart/form-data" method="post">
@@ -79,11 +96,11 @@
                 recorder.addEventListener( "streamReady", async function(e){
                     for (i = 3; i >= 1; i--) {
                         probe_text.innerHTML = i.toString();
-                        await async_sleep(800);
+                        await async_sleep(700);
                     }
                     probe_text.innerHTML = "{{ probe_text }}";
                     recorder.start();
-                    await async_sleep(3000);
+                    await async_sleep(1000);
                     recorder.stop();
                 });
 

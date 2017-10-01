@@ -12,30 +12,14 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'localizer/style.css' %}" />
 
     <script src="{% static 'localizer/js/Recorderjs/dist/recorder.min.js' %}"></script>
 
-    <style>
-        p {
-        margin: 2%;
-        text-align: left;
-        }
 
-        div {
-        margin: 5%
-        }
-
-        .danger-color{
-            color: #E53935;
-        }
-
-        ul { list-style: none; }
-        li { margin: 1em; }
-        audio { display: block; }
-    </style>
 </head>
 
-<body>
+<body class="primary-back">
     <div align="center" class="well">
         <h1>Проверка звука</h1>
 
@@ -43,22 +27,21 @@
             Давайте протестируем микрофон. Нажмите на кнопку «Запись», скажите несколько слов, затем нажмите на кнопку «Стоп».
             Внизу появится ваша запись, которую вы можете прослушать.
         </p>
-        <p>
-            Если громкость записи нормальная и можно легко понять, что вы сказали, то переходите к следующей странице, нажав «Продолжить».
-        </p>
 
+        <h4>Тестирование записи звука</h4>
+
+        <button id="start" class="btn btn-primary" >Запись</button>
+        <button id="stopButton" class="btn btn-primary" disabled>Стоп</button>
+        <p></p>
+        <ul class="list-unstyled" id="recordingslist" ></ul>
         <p>
             Вы можете протестировать звук несколько раз.
             Если у вас возникли проблемы с записью, вы можете связаться с нами по адресу: ek.stupina@gmail.com (Екатерина).
         </p>
 
-        <h3>Тестирование записи звука</h3>
-
-        <button id="start" class="btn btn-info" >Начать</button>
-        <button id="stopButton" class="btn btn-info" disabled>Закончить</button>
-
-        <h3>Ваши записи</h3>
-        <ul id="recordingslist"></ul>
+        <p>
+            Если громкость записи нормальная и можно легко понять, что вы сказали, то переходите к следующей странице, нажав «Продолжить».
+        </p>
 
         <a class="btn btn-primary" href="{% url 'localizer:questionnaire' %}">Продолжить</a>
     </div>

@@ -10,28 +10,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'localizer/style.css' %}" />
 </head>
 
-<style>
-    p {
-    margin: 2%;
-    text-align: left;
-    }
-    div {
-    margin: 5%
-    }
-    .danger-color{
-        color: #E53935;
-    }
-</style>
-
-<body>
+<body class="primary-back">
     <div align="center" class="well">
         <p>
             Извините, кажется, вы еще не заполняли анкету. Вы можете начать эксперимент сначала или написать нам (ek.stupina@gmail.com), если вы уже начинали проходить эксперимент и не хотите потерять прогресс.
         </p>
 
-        <a class="btn btn-info" href="">Начать сначала</a>
+        <a class="btn btn-primary" href="">Начать сначала</a>
     </div>
 
 </body>

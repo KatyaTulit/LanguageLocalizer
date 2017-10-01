@@ -10,20 +10,25 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'localizer/style.css' %}" />
 </head>
 
 <style>
-    p {
-    margin: 2%;
-    text-align: left;
-    }
-    div {
-    margin: 5%
+    .align-text {
+        position: absolute;
+        width: 300px;
+        height: 200px;
+        z-index: 15;
+        top: 50%;
+        left: 50%;
+        margin: -100px 0 0 -150px;
     }
 </style>
 <body>
-    <div align="center" class="well">
-        Большое спасибо за участие!
+    <div class="align-text">
+        <h1 align="center">Большое спасибо за участие!</h1>
     </div>
 
 </body>

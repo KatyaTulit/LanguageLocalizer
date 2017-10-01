@@ -11,22 +11,23 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'localizer/style.css' %}" />
+
 </head>
-
 <style>
-    p,li {
-    margin: 2%;
-    text-align: left;
-    }
-    div {
-    margin: 5%
-    }
-    .danger-color{
-        color: #E53935;
-    }
-</style>
 
-<body>
+    p {
+        margin: 1%;
+        text-align: left;
+    }
+
+    li {
+        text-align: left;
+    }
+
+</style>
+<body class="primary-back">
     <div align="center" class="well">
         <h1>Условия участия в исследовании</h1>
 
@@ -42,10 +43,11 @@
         <h1>Анкета</h1>
         <p>
             Прежде чем начать, мы бы хотели с вами немного познакомиться.
-            Заполните небольшую анкету и переходите к самому эксперименту.
+            Заполните небольшую анкету и переходите к самому исследованию. Нажимая "Продолжить", вы соглашаетесь с условиями участия в исследовании.
         </p>
 
         <form action='.' enctype="multipart/form-data" method="post">
+
             {% csrf_token %}
             {{ form.as_p }}
             <input type="submit" class="btn btn-primary" value="Продолжить" />
