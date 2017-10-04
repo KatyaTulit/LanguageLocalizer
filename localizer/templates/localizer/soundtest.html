@@ -43,7 +43,10 @@
             Если громкость записи нормальная и можно легко понять, что вы сказали, то переходите к следующей странице, нажав «Продолжить».
         </p>
 
-        <a class="btn btn-primary" href="{% url 'localizer:questionnaire' %}">Продолжить</a>
+        <form action="{% url 'localizer:questionnaire' %}">
+            <button id="next" class="btn btn-primary" disabled>Продолжить</button>
+        </form>
+
     </div>
 
     <script>
@@ -104,6 +107,7 @@
                 recorder.addEventListener( "stop", function(e){
                     stopButton.disabled = true;
                     start.disabled = false;
+                    next.disabled = false;
                 });
 
                 recorder.addEventListener( "streamReady", function(e){

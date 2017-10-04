@@ -86,14 +86,21 @@ def resume(request):
 
 def task(request):
     subject = Subject.get_subject_by_cookie(request)
-    probe = Answer.get_next_probe(subject)
-
-    if probe is not None:
-        return render(request, 'localizer/probe.html',
-                      {'probe_text': probe.probe_text})
+    if subject is None:
+        return restart(request)
     else:
-        return render(request, 'localizer/end.html')
+        probe = Answer.get_next_probe(subject)
+
+        if probe is not None:
+            return render(request, 'localizer/probe.html',
+                          {'probe_text': probe.probe_text})
+        else:
+            return render(request, 'localizer/end.html')
 
 
 def instructions(request):
-    return render(request, 'localizer/instructions.html')
+    subject = Subject.get_subject_by_cookie(request)
+    if subject is None:
+        return restart(request)
+    else:
+        return render(request, 'localizer/instructions.html')
