@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'task/upload/$', views.upload_probe, name='upload_probe'),
 
     url(r'error_unknown_subject/$', views.unknown_subject, name='error_unknown_subject'),
+    url(r'sound_problems/$', views.sound_problems, name='sound_problems'),
     url(r'restart/$', views.restart, name='restart'),
     url(r'resume/$', views.resume, name='resume'),
 

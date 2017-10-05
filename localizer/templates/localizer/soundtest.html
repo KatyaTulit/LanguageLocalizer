@@ -123,6 +123,8 @@
 
                 recorder.addEventListener( "streamError", function(e){
                     console.log('Error encountered: ' + e.error.name );
+                    document.cookie = "redirected_from=soundtest";
+                    window.location.replace("sound_problems");
                 });
 
                 recorder.addEventListener( "dataAvailable", function(e){

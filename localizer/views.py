@@ -68,6 +68,11 @@ def questionnaire(request):
     else:
         return render(request, 'localizer/error_same_subject.html')
 
+def sound_problems(request):
+    redirected_from = request.COOKIES.get('redirected_from')
+    response = render(request, 'localizer/sound_problems.html', {'redirected_from': redirected_from})
+    response.delete_cookie('redirected_from')
+    return response
 
 def unknown_subject(request):
     return render(request, 'localizer/error_unknown_subject.html')
