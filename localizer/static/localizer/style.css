@@ -2,7 +2,7 @@ body{
     font-family: Trebuchet MS;
 }
 
-p {
+p{
     margin: 2%;
     text-align: left;
 }
@@ -11,12 +11,18 @@ div {
     margin: 4%
 }
 
-h1,h2,h3,h4 {
+h1,h2,h3 {
     color: #303F9F;
 }
 
 .primary-back{
     background: #E0E0E0;
+}
+
+h4{
+    margin: 2%;
+    font-size: 18px;
+    text-align: left;
 }
 
 .btn-primary {
