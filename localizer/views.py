@@ -24,7 +24,7 @@ def recorderjs_test(request):
 def upload_probe(request):
     if request.method == 'POST':
         subject = Subject.get_subject_by_cookie(request)
-        probe = Answer.get_next_probe(subject)
+        probe = subject.get_next_probe()
         file_path = Answer.save_sound_file(sound_content=request.body, subject=subject, probe=probe)
         answer = Answer(subject=subject, probe=probe, response_sound_file_path=file_path)
         answer.save()
@@ -94,7 +94,7 @@ def task(request):
     if subject is None:
         return restart(request)
     else:
-        probe = Answer.get_next_probe(subject)
+        probe = subject.get_next_probe()
 
         if probe is not None:
             return render(request, 'localizer/probe.html',

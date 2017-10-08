@@ -10,7 +10,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 def create_control_condition_sequence():
-    return 'test'
+    return 'syl'
 
 
 class Subject(models.Model):
@@ -50,6 +50,20 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.code_name
+
+    def get_next_probe(self):
+        answers = Answer.objects.filter(subject=self)
+        if not answers:
+            next_probe_number = 1
+        else:
+            probe_numbers = [answer.probe.probe_number for answer in answers]
+            next_probe_number = max(probe_numbers) + 1
+
+        try:
+            probe = Probe.objects.get(probe_number=next_probe_number, control_condition=self.probe_control_conditions)
+            return probe
+        except ObjectDoesNotExist:
+            return None
 
     @classmethod
     def get_subject_by_cookie(cls, request):
@@ -109,21 +123,6 @@ class Answer(models.Model):
         code_name = self.subject.code_name
         probe_text = self.probe.probe_text
         return "{}'s response to '{}'".format(code_name, probe_text)
-
-    @staticmethod
-    def get_next_probe(subject):
-        answers = Answer.objects.filter(subject=subject)
-        if not answers:
-            next_probe_number = 1
-        else:
-            probe_numbers = [answer.probe.probe_number for answer in answers]
-            next_probe_number = max(probe_numbers) + 1
-
-        try:
-            probe = Probe.objects.get(probe_number=next_probe_number)
-            return probe
-        except ObjectDoesNotExist:
-            return None
 
     @classmethod
     def save_sound_file(cls, sound_content, subject, probe):
