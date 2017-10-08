@@ -73,9 +73,9 @@ class Subject(models.Model):
         except ObjectDoesNotExist:
             return None
 
-    def answer_dir(self, control_condition):
+    def answer_dir(self):
         subject_dir = self.code_name or str(self.unique_id)
-        return os.path.join(Answer.BASE_DIR, subject_dir, control_condition)
+        return os.path.join(Answer.BASE_DIR, subject_dir)
 
     def make_dirs(self):
         control_conditions = self.probe_control_conditions.split(',')
@@ -99,8 +99,8 @@ class Probe(models.Model):
         df = pd.read_csv(file_path, header=0, sep=";")
         for i, r in df.iterrows():
             probe = cls(probe_text=r['Sentence'], control_condition=r['Condition'],
-                        block_number = r['block_number'], probe_number = r['probe_number'],
-                        last_in_block = r['last_in_block'])
+                        block_number=r['block_number'], probe_number=r['probe_number'],
+                        last_in_block=r['last_in_block'])
             probe.save()
 
     def __str__(self):
@@ -126,8 +126,7 @@ class Answer(models.Model):
 
     @classmethod
     def save_sound_file(cls, sound_content, subject, probe):
-        subject_dir = subject.code_name or subject.unique_id
-        file_path = os.path.join(subject.answer_dir(probe.control_condition),
+        file_path = os.path.join(subject.answer_dir(),
                                  "probe_{}.ogg".format(probe.probe_number))
         with open(file_path, "wb") as f:
             f.write(sound_content)
