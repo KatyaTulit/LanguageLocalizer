@@ -1,5 +1,6 @@
 import csv
 import os
+import random
 
 import pandas as pd
 from django.db import models
@@ -9,9 +10,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
-def create_control_condition_sequence():
-
-    return 'syl'
+def assign_control_condition():
+    conditions = ('syl', 'pseud')
+    return random.choice(conditions)
 
 
 class Subject(models.Model):
@@ -20,7 +21,7 @@ class Subject(models.Model):
     code_name = models.CharField(max_length=15)
     date_added = models.DateTimeField(auto_now=True)
     probe_control_conditions = models.CharField(max_length=200,
-                                                default=create_control_condition_sequence)
+                                                default=assign_control_condition)
     age = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
     unique_id = models.UUIDField(default=uuid.uuid4,
                                  editable=False)
