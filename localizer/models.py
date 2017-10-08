@@ -1,6 +1,7 @@
 import csv
 import os
 
+import pandas as pd
 from django.db import models
 import uuid
 from django.templatetags.static import static
@@ -73,19 +74,20 @@ class Subject(models.Model):
 class Probe(models.Model):
     probe_text = models.CharField(max_length=200)
     control_condition = models.CharField(max_length=200)
-    probe_number = models.IntegerField("Порядковый номер предложения")
     date_added = models.DateTimeField(auto_now=True)
+    block_number = models.IntegerField("Номер блока")
+    probe_number = models.IntegerField("Порядковый номер предложения")
+    last_in_block = models.BooleanField("Проба является последней в блоке")
 
     @classmethod
-    def add_from_file(cls, csv_file_name, control_condition):
+    def add_from_file(cls, csv_file_name):
         file_path = 'localizer/static/localizer/csv/{}.csv'.format(csv_file_name)
-        with open(file_path, newline='', encoding='utf-8') as csvfile:
-            file_reader = csv.reader(csvfile, delimiter=',')
-            for row in file_reader:
-                assert(len(row) == 1)
-                probe = cls(probe_text=row[0], control_condition=control_condition,
-                            probe_number=file_reader.line_num)
-                probe.save()
+        df = pd.read_csv(file_path, header=0, sep=";")
+        for i, r in df.iterrows():
+            probe = cls(probe_text=r['Sentence'], control_condition=r['Condition'],
+                        block_number = r['block_number'], probe_number = r['probe_number'],
+                        last_in_block = r['last_in_block'])
+            probe.save()
 
     def __str__(self):
         return self.probe_text
