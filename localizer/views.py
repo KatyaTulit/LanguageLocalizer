@@ -106,8 +106,10 @@ def task(request):
         probe = subject.get_next_probe()
 
         if probe is not None:
+            percentage_complete = round(probe.probe_number / probe.probe_count * 100)
             return render(request, 'localizer/probe.html',
-                          {'probe_text': probe.probe_text})
+                          {'probe_text': probe.probe_text,
+                           'percentage_complete': percentage_complete})
         else:
             return render(request, 'localizer/end.html')
 

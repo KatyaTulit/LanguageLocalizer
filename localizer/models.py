@@ -10,6 +10,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 def create_control_condition_sequence():
+
     return 'syl'
 
 
@@ -89,6 +90,7 @@ class Probe(models.Model):
     date_added = models.DateTimeField(auto_now=True)
     block_number = models.IntegerField("Номер блока")
     probe_number = models.IntegerField("Порядковый номер предложения")
+    probe_count = models.IntegerField("Количество проб в условии")
     last_in_block = models.BooleanField("Проба является последней в блоке")
 
     @classmethod
@@ -97,8 +99,9 @@ class Probe(models.Model):
         df = pd.read_csv(file_path, header=0, sep=";")
         for i, r in df.iterrows():
             probe = cls(probe_text=r['Sentence'], control_condition=r['Condition'],
-                        block_number=r['block_number'], probe_number=r['probe_number'],
-                        last_in_block=r['last_in_block'])
+                        block_number=r['block_number'],probe_number=r['probe_number'],
+                        probe_count=r['probe_count'], last_in_block=r['last_in_block'])
+            print(probe)
             probe.save()
 
     def __str__(self):

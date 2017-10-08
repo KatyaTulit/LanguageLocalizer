@@ -6,34 +6,63 @@
 
     {% load static %}
 
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <script src="{% static 'localizer/js/Recorderjs/dist/recorder.min.js' %}"></script>
 
     <link rel="stylesheet" type="text/css" href="{% static 'localizer/style.css' %}" />
-
 
 </head>
 
 <style>
     .align-text {
         position: absolute;
-        width: 300px;
+        width: 500px;
         height: 200px;
         z-index: 15;
         top: 50%;
         left: 50%;
-        margin: -100px 0 0 -150px;
+        margin: -100px 0 0 -250px;
     }
+
+    .progress_outer {
+
+        position:absolute;
+        margin-left:35%;
+        margin-right:35%;
+        width:30%;
+        bottom:0%;
+        height: 5px;
+    }
+
+    .progress_inner{
+        margin:0%;
+        background-color: #303F9F;
+    }
+
+
 </style>
 
 <body>
-    <div class="well align-text">
+    <div class="align-text">
         <h1 id="probe_text" align="center"></h1>
+
+    </div>
+
+    <div class="progress progress_outer">
+          <div class="progress-bar progress_inner" role="progressbar" style="width:{{ percentage_complete }}%">
+          </div>
     </div>
 
     <form action='.' enctype="multipart/form-data" method="post">
         {% csrf_token %}
     </form>
+
 
     <script>
         var recorder;
