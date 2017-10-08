@@ -78,11 +78,9 @@ class Subject(models.Model):
         return os.path.join(Answer.BASE_DIR, subject_dir)
 
     def make_dirs(self):
-        control_conditions = self.probe_control_conditions.split(',')
-        for control_condition in control_conditions:
-            dir = self.answer_dir(control_condition)
-            if not os.path.exists(dir):
-                os.makedirs(dir)
+        dir = self.answer_dir()
+        if not os.path.exists(dir):
+            os.makedirs(dir)
 
 
 class Probe(models.Model):

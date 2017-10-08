@@ -97,8 +97,8 @@
                         probe_text.innerHTML = i.toString();
                         await async_sleep(700);
                     }
-                    probe_text.innerHTML = "{{ probe_text }}";
                     recorder.start();
+                    probe_text.innerHTML = "{{ probe_text }}";
                     await async_sleep(1000);
                     recorder.stop();
                 });

@@ -29,8 +29,17 @@ def upload_probe(request):
         answer = Answer(subject=subject, probe=probe, response_sound_file_path=file_path)
         answer.save()
 
+        if not probe.last_in_block:
+            url = reverse('localizer:task')
+        else:
+            if probe.block_number == 0:
+                url = reverse('localizer:training_finished')
+            else:
+                url = reverse('localizer:task_break')
+
         # Redirect will be handled by js so we will send the URL in the body
-        return HttpResponse(reverse('localizer:task'))
+        return HttpResponse(url)
+
     else:
         return HttpResponseRedirect(reverse('localizer:task'))
 
@@ -109,3 +118,10 @@ def instructions(request):
         return restart(request)
     else:
         return render(request, 'localizer/instructions.html')
+
+
+def training_finished(request):
+    return render(request, 'localizer/training_finished.html')
+
+def task_break(request):
+    return render(request, 'localizer/task_break.html')
