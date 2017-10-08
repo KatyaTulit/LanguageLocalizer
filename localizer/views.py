@@ -69,7 +69,7 @@ def questionnaire(request):
                 subject = form.save()
                 subject.make_dirs()
                 response = HttpResponseRedirect(reverse('localizer:instructions'))
-                response.set_cookie(Subject.COOKIE_NAME, subject.unique_id)
+                response.set_cookie(Subject.COOKIE_NAME, subject.unique_id, max_age=2*24*60*60)
                 return response
         else:
             form = SubjectQuestionnaireForm()
