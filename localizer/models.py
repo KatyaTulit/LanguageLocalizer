@@ -11,7 +11,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 def assign_control_condition():
-    conditions = ('syl', 'pseud')
+    conditions = Subject.CONDITIONS
     return random.choice(conditions)
 
 def create_control_condition_sequence():
@@ -20,6 +20,8 @@ def create_control_condition_sequence():
 
 class Subject(models.Model):
     COOKIE_NAME = 'subject_id'
+    CONDITIONS = ('syl', 'pseud')
+    AGE_GROUPS = ((1,17),(18,29),(30,39),(40,49),(50,59),(60,85),(86,100))
 
     code_name = models.CharField(max_length=15)
     date_added = models.DateTimeField(auto_now=True)
@@ -89,6 +91,22 @@ class Subject(models.Model):
         dir = self.answer_dir()
         if not os.path.exists(dir):
             os.makedirs(dir)
+
+    def choose_condition(self):
+
+        age_group = [group for group in self.AGE_GROUPS if group[0] <= self.age <= group[1]][0]
+        finished_counts = [len(Subject.objects.filter(finished=True, probe_control_conditions=cond,
+                                                      age__gte=age_group[0], age__lte=age_group[1]))
+                           for cond in self.CONDITIONS]
+
+        if finished_counts[0] == finished_counts[1]:
+            self.probe_control_conditions = random.choice(self.CONDITIONS)
+        elif finished_counts[0] < finished_counts[1]:
+            self.probe_control_conditions = self.CONDITIONS[0]
+        elif finished_counts[0] > finished_counts[1]:
+            self.probe_control_conditions = self.CONDITIONS[1]
+
+        self.save()
 
 
 class Probe(models.Model):
