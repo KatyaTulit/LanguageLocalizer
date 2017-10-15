@@ -1,1 +1,1 @@
-web: gunicorn localizer.wsgi --log-file -
+web: gunicorn LanguageLocalizer.wsgi --log-file -
