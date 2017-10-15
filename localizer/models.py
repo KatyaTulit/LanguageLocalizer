@@ -28,6 +28,7 @@ class Subject(models.Model):
     age = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
     unique_id = models.UUIDField(default=uuid.uuid4,
                                  editable=False)
+    finished = models.BooleanField(default=False)
 
     gender = models.CharField(
         max_length=10,
@@ -68,6 +69,8 @@ class Subject(models.Model):
             probe = Probe.objects.get(probe_number=next_probe_number, control_condition=self.probe_control_conditions)
             return probe
         except ObjectDoesNotExist:
+            self.finished = True
+            self.save()
             return None
 
     @classmethod
