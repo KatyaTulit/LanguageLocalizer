@@ -77,6 +77,7 @@ WSGI_APPLICATION = 'LanguageLocalizer.wsgi.application'
 in_heroku = False
 if 'DATABASE_URL' in os.environ:
     in_heroku = True
+print('In heroku: {}'.format(in_heroku))
 
 import dj_database_url
 if in_heroku:
