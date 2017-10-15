@@ -1,1 +1,1 @@
-web: gunicorn py_mrp.wsgi --log-file -
+web: gunicorn localizer.wsgi --log-file -
