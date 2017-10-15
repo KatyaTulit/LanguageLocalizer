@@ -74,9 +74,7 @@ WSGI_APPLICATION = 'LanguageLocalizer.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-in_heroku = False
-if 'DATABASE_URL' in os.environ:
-    in_heroku = True
+in_heroku = os.environ.get('IN_HEROKU')
 print('In heroku: {}'.format(in_heroku))
 
 import dj_database_url
