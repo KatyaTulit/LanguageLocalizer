@@ -163,6 +163,7 @@
                     recorder.start();
                     probe_text.innerHTML = "{{ probe_text }}";
                     await async_sleep(5000);
+                    probe_text.innerHTML = "!";
                     recorder.stop();
                 });
 
