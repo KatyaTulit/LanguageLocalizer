@@ -90,7 +90,7 @@ def sound_problems(request):
     return response
 
 def upload_problems(request):
-    return HttpResponse('Upload problems.')
+    return render(request, 'localizer/upload_problems.html')
 
 def unknown_subject(request):
     return render(request, 'localizer/error_unknown_subject.html')
