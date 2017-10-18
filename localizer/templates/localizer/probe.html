@@ -106,7 +106,6 @@
             if(xhr.readyState === 4){
               if(xhr.status === 200){
                 var response = JSON.parse(xhr.responseText);
-                console.log(response);
                 uploadFileToS3AndRedirect(blob, response.data, response.url, response.redirect_url);
               }
               else{

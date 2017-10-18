@@ -90,7 +90,6 @@ class Subject(models.Model):
 
     def make_dirs(self):
         dir = self.answer_dir()
-        print('Subject''s dir: {}'.format(dir))
         if not os.path.exists(dir):
             os.makedirs(dir)
 
