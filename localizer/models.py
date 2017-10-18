@@ -144,7 +144,7 @@ class Answer(models.Model):
 
     subject = models.ForeignKey(Subject, on_delete=models.PROTECT)
     probe = models.ForeignKey(Probe, on_delete=models.PROTECT)
-    response_sound_file_path = models.FilePathField()
+    response_sound_file_path = models.URLField()
     dt_recorded = models.DateTimeField(auto_now=True)
 
     def __str___(self):
