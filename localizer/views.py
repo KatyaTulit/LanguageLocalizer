@@ -1,6 +1,11 @@
+import os
+import json
+
+import boto3
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from django.conf import settings
 
 from .forms import UploadFileForm, SubjectQuestionnaireForm
 from .models import Probe, Subject, Answer
@@ -84,6 +89,9 @@ def sound_problems(request):
     response.delete_cookie('redirected_from')
     return response
 
+def upload_problems(request):
+    return HttpResponse('Upload problems.')
+
 def unknown_subject(request):
     return render(request, 'localizer/error_unknown_subject.html')
 
@@ -113,6 +121,55 @@ def task(request):
                            'percentage_complete': percentage_complete})
         else:
             return render(request, 'localizer/end.html')
+
+
+def sign_s3(request):
+    if request.method == 'POST':
+
+        subject = Subject.get_subject_by_cookie(request)
+        probe = subject.get_next_probe()
+        file_path = Answer.get_file_url(subject=subject, probe=probe)
+
+        S3_BUCKET = settings.AWS_STORAGE_BUCKET_NAME
+
+        s3_file_path = 'https://{}.s3-eu-west-1.amazonaws.com/{}'.format(S3_BUCKET, file_path)
+        s3_file_path = 'https://{}.s3.amazonaws.com/{}'.format(S3_BUCKET, file_path)
+
+        answer = Answer(subject=subject, probe=probe, response_sound_file_path=s3_file_path)
+        answer.save()
+
+        if not probe.last_in_block:
+            redirect_url = reverse('localizer:task')
+        else:
+            if probe.block_number == 0:
+                redirect_url = reverse('localizer:training_finished')
+            else:
+                redirect_url = reverse('localizer:task_break')
+
+        s3 = boto3.client('s3')
+
+        presigned_post = s3.generate_presigned_post(
+            Bucket=S3_BUCKET,
+            Key=file_path,
+            Fields={"acl": "private", "Content-Type": "audio/ogg"},
+            Conditions=[
+                {"acl": "private"},
+                {"Content-Type": "audio/ogg"}
+            ],
+            ExpiresIn=3600
+        )
+
+        # presigned_post['url'] = 'https://languagelocalizer2.s3.amazonaws.com/'
+
+        data = json.dumps({
+            'data': presigned_post,
+            'url': s3_file_path,
+            'redirect_url': redirect_url
+        })
+        return HttpResponse(data, content_type='application/json')
+
+    else:
+        return HttpResponseRedirect(reverse('localizer:task'))
 
 
 def instructions(request):

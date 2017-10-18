@@ -1,6 +1,7 @@
 import csv
 import os
 import random
+import urllib
 
 import pandas as pd
 from django.db import models
@@ -151,10 +152,19 @@ class Answer(models.Model):
         probe_text = self.probe.probe_text
         return "{}'s response to '{}'".format(code_name, probe_text)
 
+    @staticmethod
+    def get_file_url(subject, probe):
+        return '{}/{}'.format(subject.answer_dir(),
+                            "probe_{}.ogg".format(probe.probe_number))
+
+    @staticmethod
+    def get_file_path(subject, probe):
+        return os.path.join(subject.answer_dir(),
+                                 "probe_{}.ogg".format(probe.probe_number))
+
     @classmethod
     def save_sound_file(cls, sound_content, subject, probe):
-        file_path = os.path.join(subject.answer_dir(),
-                                 "probe_{}.ogg".format(probe.probe_number))
+        file_path = cls.get_file_path(subject, probe)
         with open(file_path, "wb") as f:
             f.write(sound_content)
         return file_path

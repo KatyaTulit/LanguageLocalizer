@@ -28,6 +28,8 @@ simplegeneric = "==0.8.1"
 traitlets = "==4.3.2"
 wcwidth = "==0.1.7"
 whitenoise = "*"
+django-storages = "*"
+"boto3" = "*"
 
 
 [dev-packages]
