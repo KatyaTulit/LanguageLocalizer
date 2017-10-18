@@ -112,6 +112,9 @@ def task(request):
     if subject is None:
         return restart(request)
     else:
+        if not subject.last_answer_successfully_uploaded():
+            return HttpResponseRedirect(reverse('localizer:upload_problems'))
+
         probe = subject.get_next_probe()
 
         if probe is not None:

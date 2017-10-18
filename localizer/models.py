@@ -9,6 +9,7 @@ import uuid
 from django.templatetags.static import static
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.files.storage import default_storage
 
 
 def assign_control_condition():
@@ -59,6 +60,19 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.code_name
+
+    def last_answer_successfully_uploaded(self):
+        answers = Answer.objects.filter(subject=self)
+        if not answers:
+            return True
+        else:
+            last_answer = max(answers, key=lambda answer: answer.probe.probe_number)
+            path = urllib.parse.urlparse(last_answer.response_sound_file_path).path
+            if default_storage.exists(path):
+                return True
+            else:
+                last_answer.delete()
+                return False
 
     def get_next_probe(self):
         answers = Answer.objects.filter(subject=self)
