@@ -158,7 +158,7 @@
                 recorder.addEventListener( "streamReady", async function(e){
                     for (i = 3; i >= 1; i--) {
                         probe_text.innerHTML = i.toString();
-                        await async_sleep(700);
+                        await async_sleep(600);
                     }
                     recorder.start();
                     probe_text.innerHTML = "{{ probe_text }}";
