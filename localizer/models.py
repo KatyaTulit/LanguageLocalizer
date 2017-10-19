@@ -45,13 +45,15 @@ class Subject(models.Model):
 
     DIPLOMA = 'Higher'
     STUDENT = 'Student'
+    COLLEGE = 'College'
     HIGHSCHOOL = 'HighSchool'
     NINECLASSES = 'NineClasses'
     EDUCATION_CHOICES = (
         (DIPLOMA, 'Высшее'),
         (STUDENT, 'Получаю высшее (студент)'),
-        (HIGHSCHOOL, 'Полное среднее, среднее специальное'),
-        (NINECLASSES, 'Неполное среднее'),
+        (COLLEGE, 'Среднее профессиональное (техникум, колледж)'),
+        (HIGHSCHOOL, 'Полное среднее (11 классов)'),
+        (NINECLASSES, 'Неполное среднее (9 классов)'),
     )
     education = models.CharField(
         max_length=20,
