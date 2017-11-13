@@ -61,7 +61,7 @@ class Subject(models.Model):
     )
 
     def __str__(self):
-        return self.code_name
+        return str(self.unique_id)
 
     def last_answer_successfully_uploaded(self):
         answers = Answer.objects.filter(subject=self)
