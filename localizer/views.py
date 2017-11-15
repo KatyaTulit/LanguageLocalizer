@@ -1,5 +1,6 @@
 import os
 import json
+import pandas as pd
 
 import boto3
 from django.shortcuts import render, get_object_or_404
@@ -188,3 +189,19 @@ def training_finished(request):
 
 def task_break(request):
     return render(request, 'localizer/task_break.html')
+
+def subjects_summary(request):
+    SUMMARY_AGE_GROUPS = ((18, 29), (30, 39), (40, 49), (50, 59), (60, 72))
+    df = pd.DataFrame(index=SUMMARY_AGE_GROUPS)
+
+    control_conditions = ('syl', 'pseud')
+    for condition in control_conditions:
+        df[condition] = [len(Subject.objects.filter(finished=True, probe_control_conditions='syl',
+                                                    age__gte=age_group[0], age__lte=age_group[1])
+                                            .exclude(code_name__startswith='fail')
+                             )
+                         for age_group in SUMMARY_AGE_GROUPS]
+
+    html_table = df.to_html()
+
+    return render(request, 'localizer/subjects_summary.html', {'html_table': html_table})

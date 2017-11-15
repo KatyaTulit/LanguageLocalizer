@@ -22,6 +22,10 @@ urlpatterns = [
     url(r'restart/$', views.restart, name='restart'),
     url(r'resume/$', views.resume, name='resume'),
 
+    url(r'subjects_summary/', views.subjects_summary, name="subjects_summary"),
+
     url(r'^$', views.file_choice, name='file_choice'),
     url(r'recorderjs_test/', views.recorderjs_test, name="recorderjs_test"),
+
+
 ]
