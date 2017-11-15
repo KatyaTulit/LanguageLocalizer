@@ -196,7 +196,7 @@ def subjects_summary(request):
 
     control_conditions = ('syl', 'pseud')
     for condition in control_conditions:
-        df[condition] = [len(Subject.objects.filter(finished=True, probe_control_conditions='syl',
+        df[condition] = [len(Subject.objects.filter(finished=True, probe_control_conditions=condition,
                                                     age__gte=age_group[0], age__lte=age_group[1])
                                             .exclude(code_name__startswith='fail')
                              )
