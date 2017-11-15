@@ -26,7 +26,7 @@ class Subject(models.Model):
     AGE_GROUPS = ((1,17),(18,29),(30,39),(40,49),(50,59),(60,85),(86,100))
 
     code_name = models.CharField(max_length=15)
-    date_added = models.DateTimeField(auto_now=True)
+    date_added = models.DateTimeField(auto_now_add=True)
     probe_control_conditions = models.CharField(max_length=200,
                                                 default=assign_control_condition)
     age = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
