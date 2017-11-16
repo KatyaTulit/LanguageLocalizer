@@ -204,4 +204,13 @@ def subjects_summary(request):
 
     html_table = df.to_html()
 
-    return render(request, 'localizer/subjects_summary.html', {'html_table': html_table})
+    for condition in control_conditions:
+        df[condition] = [len(Subject.objects.filter(finished=True, probe_control_conditions=condition,
+                                                    age__gte=age_group[0], age__lte=age_group[1],
+                                                    code_name__startswith='ok')
+                             )
+                         for age_group in SUMMARY_AGE_GROUPS]
+
+    html_table_ok = df.to_html()
+
+    return render(request, 'localizer/subjects_summary.html', {'html_table': html_table, 'html_table_ok': html_table_ok})

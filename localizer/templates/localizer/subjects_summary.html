@@ -22,8 +22,11 @@
 <body>
 
     <div>
-        <h3>Subjects Summary Table</h3>
+        <h3>Subjects Completed</h3>
         {{ html_table | safe }}
+
+        <h3>Subjects Processed</h3>
+        {{ html_table_ok | safe }}
 
     </div>
 
