@@ -113,6 +113,7 @@ class Subject(models.Model):
 
         age_group = [group for group in self.AGE_GROUPS if group[0] <= self.age <= group[1]][0]
         finished_counts = [len(Subject.objects.filter(finished=True, probe_control_conditions=cond,
+                                                      gender=self.gender,
                                                       age__gte=age_group[0], age__lte=age_group[1])
                                               .exclude(code_name__startswith='fail')
                                )
