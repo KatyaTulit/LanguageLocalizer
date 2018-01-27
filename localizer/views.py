@@ -191,25 +191,30 @@ def task_break(request):
     return render(request, 'localizer/task_break.html')
 
 def subjects_summary(request):
-    SUMMARY_AGE_GROUPS = ((18, 29), (30, 39), (40, 49), (50, 59), (60, 72))
+    SUMMARY_AGE_GROUPS = ((18, 29), (30, 39), (40, 49), (50, 59), (60, 79))
+    SUMMARY_GENDERS = ('female', 'male')
     df = pd.DataFrame(index=SUMMARY_AGE_GROUPS)
 
     control_conditions = ('syl', 'pseud')
-    for condition in control_conditions:
-        df[condition] = [len(Subject.objects.filter(finished=True, probe_control_conditions=condition,
-                                                    age__gte=age_group[0], age__lte=age_group[1])
-                                            .exclude(code_name__startswith='fail')
-                             )
-                         for age_group in SUMMARY_AGE_GROUPS]
+    for gender in SUMMARY_GENDERS:
+        for condition in control_conditions:
+            df[condition + ' ' + gender] = [len(Subject.objects.filter(finished=True,
+                                                        probe_control_conditions=condition, gender=gender,
+                                                        age__gte=age_group[0], age__lte=age_group[1])
+                                                .exclude(code_name__startswith='fail')
+                                 )
+                             for age_group in SUMMARY_AGE_GROUPS]
 
     html_table = df.to_html()
 
-    for condition in control_conditions:
-        df[condition] = [len(Subject.objects.filter(finished=True, probe_control_conditions=condition,
-                                                    age__gte=age_group[0], age__lte=age_group[1],
-                                                    code_name__startswith='ok')
-                             )
-                         for age_group in SUMMARY_AGE_GROUPS]
+    for gender in SUMMARY_GENDERS:
+        for condition in control_conditions:
+            df[condition + ' ' + gender] = [len(Subject.objects.filter(finished=True,
+                                                        probe_control_conditions=condition, gender=gender,
+                                                        age__gte=age_group[0], age__lte=age_group[1],
+                                                        code_name__startswith='ok')
+                                 )
+                             for age_group in SUMMARY_AGE_GROUPS]
 
     html_table_ok = df.to_html()
 
