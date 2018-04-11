@@ -124,7 +124,7 @@ def task(request):
                           {'probe_text': probe.probe_text,
                            'percentage_complete': percentage_complete})
         else:
-            return render(request, 'localizer/end.html')
+            return render(request, 'localizer/end.html', {'subject_id': subject.unique_id})
 
 
 def sign_s3(request):
